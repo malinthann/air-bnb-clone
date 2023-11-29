@@ -4,17 +4,19 @@ import {
   Button,
   StyleSheet,
   SafeAreaView,
-  Image,
-  TouchableOpacity,
   TextInput,
-} from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useAuth, useUser } from '@clerk/clerk-expo';
-import { defaultStyles } from '@/constants/Styles';
-import { Ionicons } from '@expo/vector-icons';
-import Colors from '@/constants/Colors';
-import { Link } from 'expo-router';
-import * as ImagePicker from 'expo-image-picker';
+} from "react-native";
+
+import { PressableScale } from "react-native-pressable-scale";
+
+import { Image } from "expo-image";
+import React, { useEffect, useState } from "react";
+import { useAuth, useUser } from "@clerk/clerk-expo";
+import { defaultStyles } from "@/constants/Styles";
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
+import { Link } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
 
 const Page = () => {
   const { signOut, isSignedIn } = useAuth();
@@ -49,6 +51,9 @@ const Page = () => {
     }
   };
 
+  const blurhash =
+    "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+
   // Capture image from camera roll
   // Upload to Clerk as avatar
   const onCaptureImage = async () => {
@@ -76,37 +81,51 @@ const Page = () => {
 
       {user && (
         <View style={styles.card}>
-          <TouchableOpacity onPress={onCaptureImage}>
-            <Image source={{ uri: user?.imageUrl }} style={styles.avatar} />
-          </TouchableOpacity>
-          <View style={{ flexDirection: 'row', gap: 6 }}>
+          <PressableScale onPress={onCaptureImage}>
+            <Image
+              contentFit="cover"
+              transition={1000}
+              source={{ uri: user?.imageUrl }}
+              style={styles.avatar}
+              placeholder={blurhash}
+            />
+          </PressableScale>
+          <View style={{ flexDirection: "row", gap: 6 }}>
             {!edit && (
               <View style={styles.editRow}>
-                <Text style={{ fontFamily: 'mon-b', fontSize: 22 }}>
+                <Text style={{ fontFamily: "mon-b", fontSize: 22 }}>
                   {firstName} {lastName}
                 </Text>
-                <TouchableOpacity onPress={() => setEdit(true)}>
-                  <Ionicons name="create-outline" size={24} color={Colors.dark} />
-                </TouchableOpacity>
+                <PressableScale onPress={() => setEdit(true)}>
+                  <Ionicons
+                    name="create-outline"
+                    size={24}
+                    color={Colors.dark}
+                  />
+                </PressableScale>
               </View>
             )}
             {edit && (
               <View style={styles.editRow}>
                 <TextInput
                   placeholder="First Name"
-                  value={firstName || ''}
+                  value={firstName || ""}
                   onChangeText={setFirstName}
                   style={[defaultStyles.inputField, { width: 100 }]}
                 />
                 <TextInput
                   placeholder="Last Name"
-                  value={lastName || ''}
+                  value={lastName || ""}
                   onChangeText={setLastName}
                   style={[defaultStyles.inputField, { width: 100 }]}
                 />
-                <TouchableOpacity onPress={onSaveUser}>
-                  <Ionicons name="checkmark-outline" size={24} color={Colors.dark} />
-                </TouchableOpacity>
+                <PressableScale onPress={onSaveUser}>
+                  <Ionicons
+                    name="checkmark-outline"
+                    size={24}
+                    color={Colors.dark}
+                  />
+                </PressableScale>
               </View>
             )}
           </View>
@@ -115,9 +134,11 @@ const Page = () => {
         </View>
       )}
 
-      {isSignedIn && <Button title="Log Out" onPress={() => signOut()} color={Colors.dark} />}
+      {isSignedIn && (
+        <Button title="Log Out" onPress={() => signOut()} color={Colors.dark} />
+      )}
       {!isSignedIn && (
-        <Link href={'/(modals)/login'} asChild>
+        <Link href={"/(modals)/login"} asChild>
           <Button title="Log In" color={Colors.dark} />
         </Link>
       )}
@@ -127,29 +148,29 @@ const Page = () => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     padding: 24,
   },
   header: {
-    fontFamily: 'mon-b',
+    fontFamily: "mon-b",
     fontSize: 24,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 24,
     borderRadius: 16,
     marginHorizontal: 24,
     marginTop: 24,
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.2,
     shadowRadius: 6,
     shadowOffset: {
       width: 1,
       height: 2,
     },
-    alignItems: 'center',
+    alignItems: "center",
     gap: 14,
     marginBottom: 24,
   },
@@ -161,9 +182,9 @@ const styles = StyleSheet.create({
   },
   editRow: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     gap: 8,
   },
 });
